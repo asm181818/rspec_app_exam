@@ -63,6 +63,7 @@ RSpec.describe 'Task', type: :system do
     context '正常系' do
       let(:project) { FactoryBot.create(:project) }
       let(:task) { FactoryBot.create(:task) }
+      let(:completion_task) { FactoryBot.create(:task, :completion_task) }
       it 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
         # FIXME: テストが失敗するので修正してください -OK
         visit edit_project_task_path(project, task)
@@ -83,17 +84,15 @@ RSpec.describe 'Task', type: :system do
         expect(page).to have_content(Time.current.strftime('%Y-%m-%d'))
         expect(current_path).to eq project_task_path(project, task)
       end
-
+      
       it '既にステータスが完了のタスクのステータスを変更した場合、Taskの完了日が更新されないこと' do
         # TODO: FactoryBotのtraitを利用してください
-        project = FactoryBot.create(:project)
-        task = FactoryBot.create(:task, project_id: project.id, status: :done, completion_date: Time.current.yesterday)
-        visit edit_project_task_path(project, task)
+        visit edit_project_task_path(project, completion_task)
         select 'todo', from: 'Status'
         click_button 'Update Task'
         expect(page).to have_content('todo')
         expect(page).not_to have_content(Time.current.strftime('%Y-%m-%d'))
-        expect(current_path).to eq project_task_path(project, task)
+        expect(current_path).to eq project_task_path(project, completion_task)
       end
     end
   end
