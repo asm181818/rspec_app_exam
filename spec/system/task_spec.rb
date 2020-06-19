@@ -46,10 +46,10 @@ RSpec.describe 'Task', type: :system do
 
   describe 'Task詳細' do
     context '正常系' do
+      let(:project) { FactoryBot.create(:project) }
+      let(:task) { FactoryBot.create(:task) }
       it 'Taskが表示されること' do
         # TODO: ローカル変数ではなく let を使用してください
-        project = FactoryBot.create(:project)
-        task = FactoryBot.create(:task, project_id: project.id)
         visit project_task_path(project, task)
         expect(page).to have_content(task.title)
         expect(page).to have_content(task.status)
