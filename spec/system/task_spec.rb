@@ -13,12 +13,14 @@ RSpec.describe 'Task', type: :system do
         expect(current_path).to eq project_tasks_path(project)
       end
 
-      xit 'Project詳細からTask一覧ページにアクセスした場合、Taskが表示されること' do
-        # FIXME: テストが失敗するので修正してください
-        project = FactoryBot.create(:project)
-        task = FactoryBot.create(:task, project_id: project.id)
+      it 'Project詳細からTask一覧ページにアクセスした場合、Taskが表示されること' do
+        # FIXME: テストが失敗するので修正してください --OK
+        # Project詳細ページに遷移
         visit project_path(project)
+        # プロジェクトのタスク一覧ページに遷移するリンクをクリック
         click_link 'View Todos'
+        # 別タブで開かれた先のページ(タスク一覧ページ)をテスト
+        switch_to_window(windows.last)
         expect(page).to have_content task.title
         expect(Task.count).to eq 1
         expect(current_path).to eq project_tasks_path(project)
