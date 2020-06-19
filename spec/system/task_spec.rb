@@ -2,10 +2,11 @@ require 'rails_helper'
 include ApplicationHelper
 
 RSpec.describe 'Task', type: :system do
+  let(:project) { create(:project) }
+  let(:task) { create(:task) }
   describe 'Task一覧' do
-    let(:project) { FactoryBot.create(:project) }
-    let(:task) { FactoryBot.create(:task) }
     context '正常系' do
+      
       it '一覧ページにアクセスした場合、Taskが表示されること' do
         # TODO: ローカル変数ではなく let を使用してください --OK
         visit project_tasks_path(project)
@@ -31,7 +32,6 @@ RSpec.describe 'Task', type: :system do
 
   describe 'Task新規作成' do
     context '正常系' do
-      let(:project) { FactoryBot.create(:project) }
       it 'Taskが新規作成されること' do
         # TODO: ローカル変数ではなく let を使用してください --OK
         visit project_tasks_path(project)
@@ -47,8 +47,6 @@ RSpec.describe 'Task', type: :system do
 
   describe 'Task詳細' do
     context '正常系' do
-      let(:project) { FactoryBot.create(:project) }
-      let(:task) { FactoryBot.create(:task) }
       it 'Taskが表示されること' do
         # TODO: ローカル変数ではなく let を使用してください
         visit project_task_path(project, task)
@@ -62,9 +60,6 @@ RSpec.describe 'Task', type: :system do
 
   describe 'Task編集' do
     context '正常系' do
-      let(:project) { FactoryBot.create(:project) }
-      let(:task) { FactoryBot.create(:task) }
-      let(:completion_task) { FactoryBot.create(:task, :completion_task) }
       it 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
         # FIXME: テストが失敗するので修正してください -OK
         visit edit_project_task_path(project, task)
@@ -88,6 +83,7 @@ RSpec.describe 'Task', type: :system do
       
       it '既にステータスが完了のタスクのステータスを変更した場合、Taskの完了日が更新されないこと' do
         # TODO: FactoryBotのtraitを利用してください
+        completion_task = create(:task, :completion_task)
         visit edit_project_task_path(project, completion_task)
         select 'todo', from: 'Status'
         click_button 'Update Task'
@@ -102,8 +98,7 @@ RSpec.describe 'Task', type: :system do
     context '正常系' do
       # FIXME: テストが失敗するので修正してください
       it 'Taskが削除されること' do
-        project = FactoryBot.create(:project)
-        task = FactoryBot.create(:task)
+        task = create(:task)
         # プロジェクトのタスク一覧ページに遷移
         visit project_tasks_path(project)
         click_link 'Destroy'
