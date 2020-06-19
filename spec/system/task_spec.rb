@@ -1,4 +1,5 @@
 require 'rails_helper'
+include ApplicationHelper
 
 RSpec.describe 'Task', type: :system do
   describe 'Task一覧' do
@@ -71,7 +72,7 @@ RSpec.describe 'Task', type: :system do
         click_button 'Update Task'
         click_link 'Back'
         # 日時の表示形式を変更
-        expect(find('.task_list')).to have_content(Time.current.strftime('%-m/%d %-H:%M'))
+        expect(find('.task_list')).to have_content(short_time(Time.current))
         expect(current_path).to eq project_tasks_path(project)
       end
 
