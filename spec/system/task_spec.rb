@@ -65,11 +65,14 @@ RSpec.describe 'Task', type: :system do
         # FIXME: テストが失敗するので修正してください
         project = FactoryBot.create(:project)
         task = FactoryBot.create(:task, project_id: project.id)
+      it 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
+        # FIXME: テストが失敗するので修正してください -OK
         visit edit_project_task_path(project, task)
         fill_in 'Deadline', with: Time.current
         click_button 'Update Task'
         click_link 'Back'
-        expect(find('.task_list')).to have_content(Time.current.strftime('%Y-%m-%d'))
+        # 日時の表示形式を変更
+        expect(find('.task_list')).to have_content(Time.current.strftime('%-m/%d %-H:%M'))
         expect(current_path).to eq project_tasks_path(project)
       end
 
